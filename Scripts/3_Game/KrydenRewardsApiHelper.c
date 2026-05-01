@@ -63,34 +63,52 @@ class KrydenRewardsApiHelper
 
     private static string GetKnownErrorMessage(string raw)
     {
-        if (raw.Contains("AlreadyClaimed"))
+        string normalized = raw;
+        normalized.ToLower();
+
+        if (normalized.Contains("alreadyclaimed") || normalized.Contains("ja foi resgatado"))
         {
             return "Este codigo ja foi resgatado.";
         }
 
-        if (raw.Contains("InvalidCode"))
+        if (normalized.Contains("invalidcode"))
         {
             return "Codigo de resgate invalido.";
         }
 
-        if (raw.Contains("SteamIdMismatch"))
+        if (normalized.Contains("steamidmismatch"))
         {
             return "Este codigo pertence a outro SteamID.";
         }
 
-        if (raw.Contains("NotReadyToClaim"))
+        if (normalized.Contains("notreadytoclaim"))
         {
             return "Este pedido ainda nao esta disponivel para resgate.";
         }
 
-        if (raw.Contains("Unauthorized"))
+        if (normalized.Contains("unauthorized") || normalized.Contains("401"))
         {
             return "Servidor nao autorizado. Avise a administracao.";
         }
 
-        if (raw.Contains("InvalidSteamId"))
+        if (normalized.Contains("invalidsteamid"))
         {
             return "SteamID invalido para este resgate.";
+        }
+
+        if (normalized.Contains("409") || normalized.Contains("conflict"))
+        {
+            return "Este pedido nao esta disponivel ou ja foi resgatado.";
+        }
+
+        if (normalized == "client error" || normalized.Contains("client error"))
+        {
+            return "Este codigo nao esta disponivel ou ja foi resgatado.";
+        }
+
+        if (normalized.Contains("404") || normalized.Contains("not found"))
+        {
+            return "Codigo de resgate invalido.";
         }
 
         return "";

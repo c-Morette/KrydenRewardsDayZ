@@ -19,6 +19,7 @@ class KrydenRewardsRedeemResponse
 }
 class KrydenRewardsErrorResponse
 {
+    bool success;
     string error;
     string message;
 }
