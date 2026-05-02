@@ -1,7 +1,6 @@
 {
   "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
   "serverKey": "COLE_A_DAYZ_SERVER_API_KEY_AQUI",
-  "commandPrefix": "//resgatar",
   "dropOnGroundIfInventoryFull": true,
   "debugLogs": true
 }

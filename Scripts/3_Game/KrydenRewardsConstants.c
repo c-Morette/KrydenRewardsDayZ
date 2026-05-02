@@ -3,7 +3,7 @@ class KrydenRewardsConstants
     static const int RPC_REDEEM_REQUEST = 914001;
     static const string PROFILE_DIR = "$profile:KrydenRewards";
     static const string CONFIG_PATH = "$profile:KrydenRewards/Config.json";
-    static const string DEFAULT_COMMAND_PREFIX = "//resgatar";
+    static const string REDEEM_COMMAND_PREFIX = "//resgatar";
 }
 class KrydenRewardsChatCommand
 {
@@ -17,7 +17,7 @@ class KrydenRewardsChatCommand
         text.Trim();
         string lowered = text;
         lowered.ToLower();
-        string prefix = KrydenRewardsConstants.DEFAULT_COMMAND_PREFIX;
+        string prefix = KrydenRewardsConstants.REDEEM_COMMAND_PREFIX;
         prefix.ToLower();
         if (lowered.IndexOf(prefix) != 0)
         {

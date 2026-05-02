@@ -36,13 +36,81 @@ Exemplo:
 {
   "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
   "serverKey": "COLE_A_DAYZ_SERVER_API_KEY_AQUI",
-  "commandPrefix": "//resgatar",
   "dropOnGroundIfInventoryFull": true,
   "debugLogs": true
 }
 ```
 
 Nunca coloque serverKey real dentro do PBO publico. A chave real deve ficar somente no profile do servidor.
+
+O comando de resgate e fixo no codigo do mod:
+
+```text
+//resgatar CODIGO
+```
+
+Ele nao deve ficar no `Config.json`. Isso reduz erro humano na instalacao e garante que bot, API, documentacao e mod usem sempre o mesmo comando.
+
+## Instalacao Limpa No Servidor
+
+Estrutura esperada depois de empacotar/publicar o mod:
+
+```text
+@KrydenRewards/
+  Addons/
+    KrydenRewards.pbo
+    KrydenRewards.pbo.bisign
+  Keys/
+    KrydenRewards.bikey
+```
+
+Passo a passo:
+
+```text
+1. Copiar @KrydenRewards para a pasta raiz do servidor DayZ.
+2. Copiar KrydenRewards.bikey para a pasta Keys do servidor.
+3. Adicionar @KrydenRewards na linha de mods do servidor.
+4. Iniciar o servidor uma primeira vez.
+5. Confirmar que o arquivo $profile:KrydenRewards/Config.json foi criado.
+6. Parar o servidor.
+7. Editar $profile:KrydenRewards/Config.json.
+8. Preencher apiBaseUrl com a URL HTTPS da instancia.
+9. Preencher serverKey com a chave DayZ da instancia.
+10. Ajustar dropOnGroundIfInventoryFull e debugLogs se necessario.
+11. Iniciar o servidor novamente.
+12. Testar //resgatar CODIGO com um pedido aprovado.
+```
+
+Exemplo final de `Config.json` em producao:
+
+```json
+{
+  "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
+  "serverKey": "CHAVE_REAL_ENTREGUE_PELA_KRYDEN",
+  "dropOnGroundIfInventoryFull": true,
+  "debugLogs": false
+}
+```
+
+## Atualizacao De Config Antiga
+
+Versoes antigas de teste podiam gerar:
+
+```json
+{
+  "commandPrefix": "//resgatar"
+}
+```
+
+Esse campo nao e mais usado.
+
+Ao atualizar servidor antigo, remova `commandPrefix` manualmente do `Config.json` para evitar confusao operacional.
+
+O comando oficial permanece fixo:
+
+```text
+//resgatar CODIGO
+```
 
 ## Endpoint Consumido
 
@@ -103,11 +171,15 @@ Scripts/
 1. Subir o mod em servidor local.
 2. Confirmar que `$profile:KrydenRewards/Config.json` foi gerado ao iniciar o servidor.
 3. Preencher `serverKey` real da instancia.
-4. Criar pedido no Discord e simular pagamento.
-5. Digitar `//resgatar CODIGO` no DayZ.
-6. Verificar se itens aparecem no inventario ou no chao.
-7. Verificar se API marcou o pedido como `Claimed`.
-8. Tentar resgatar o mesmo codigo novamente e confirmar bloqueio.
+4. Confirmar que `commandPrefix` nao existe mais no `Config.json`.
+5. Criar pedido no Discord e simular ou confirmar pagamento.
+6. Digitar `//resgatar CODIGO` no DayZ.
+7. Verificar se itens aparecem no inventario ou no chao.
+8. Verificar se API marcou o pedido como `Claimed`.
+9. Tentar resgatar o mesmo codigo novamente e confirmar bloqueio.
+10. Testar codigo invalido e confirmar mensagem amigavel.
+11. Testar classe invalida em pacote de teste antes de entregar a cliente.
+12. Testar inventario cheio com `dropOnGroundIfInventoryFull=true`.
 
 ## Cuidados
 
@@ -116,3 +188,6 @@ Scripts/
 - Se inventario estiver cheio e `dropOnGroundIfInventoryFull=true`, o item cai no chao perto do jogador.
 - O primeiro MVP usa `GET_now`, seguindo o exemplo `VirtualLockSyncApi`.
 - Depois podemos evoluir para `RestCallback` assincrono se houver travamento perceptivel.
+- Nao embutir `serverKey` real no PBO.
+- Nao entregar `Config.json` real dentro do pacote publico.
+- Para cliente final, `debugLogs=false` e recomendado depois dos testes.

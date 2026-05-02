@@ -2,7 +2,6 @@ class KrydenRewardsConfig
 {
     string apiBaseUrl = "https://{SOLICITAR_COM_A_KRYDEN}.rewards.kryden.com.br";
     string serverKey = "COLE_A_DAYZ_SERVER_API_KEY_AQUI";
-    string commandPrefix = "//resgatar";
     bool dropOnGroundIfInventoryFull = true;
     bool debugLogs = true;
     static KrydenRewardsConfig Load()
@@ -25,10 +24,6 @@ class KrydenRewardsConfig
         {
             Print("[KrydenRewards] Failed to load config: " + errorMessage);
             return new KrydenRewardsConfig();
-        }
-        if (config.commandPrefix == "")
-        {
-            config.commandPrefix = KrydenRewardsConstants.DEFAULT_COMMAND_PREFIX;
         }
         return config;
     }
