@@ -191,3 +191,6 @@ Scripts/
 - Nao embutir `serverKey` real no PBO.
 - Nao entregar `Config.json` real dentro do pacote publico.
 - Para cliente final, `debugLogs=false` e recomendado depois dos testes.
+
+
+
