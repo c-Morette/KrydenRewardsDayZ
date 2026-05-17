@@ -33,7 +33,7 @@ class KrydenRewardsDeliveryContext
 class KrydenRewardsRedeemService
 {
     private static const int MAX_NESTED_REWARD_DEPTH = 8;
-    private static const float VEHICLE_SPAWN_DISTANCE = 3.0;
+    private static const float VEHICLE_SPAWN_DISTANCE = 10.0;
     private static const float GROUND_SPAWN_DISTANCE = 1.2;
 
     static void ProcessRedeem(PlayerBase player, string code)

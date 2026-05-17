@@ -230,11 +230,18 @@ Regras fixas do runtime atual:
 
 - itens, armas, roupas, caixas e containers nascem no chao perto do jogador
 - veiculos nascem a frente do jogador
+- veiculos usam distancia fixa de 10 metros
 - magazines anexados nascem cheios
 - o mod tenta chamber automatico em armas com magazine valido
 - veiculos nascem com fluidos completos
 - attachments repetidos devem ser enviados como entradas repetidas no array
 - `KrydenRewardsSeaChest` nao pode ser pego, nao pode ir para inventario, so permite retirada e apaga quando fica vazio
+
+Classificacao de veiculo no runtime:
+
+- o JSON nao envia um campo manual dizendo se algo e veiculo
+- o mod decide isso pelo `className`
+- atualmente, classes que herdam de `CarScript` ou `Boat_Base` entram no fluxo de veiculo
 
 ## Arquitetura Do Mod
 

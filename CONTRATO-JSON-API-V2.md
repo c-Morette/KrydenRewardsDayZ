@@ -124,10 +124,38 @@ O backend nao precisa emitir isso no JSON, mas precisa saber que o mod executa e
 
 - itens, armas, roupas, coletes e containers nascem no chao perto do jogador
 - veiculos nascem a frente do jogador
+- veiculos usam distancia fixa de 10 metros
 - veiculos nascem com fluidos completos
 - magazines criados como attachment nascem cheios
 - o mod tenta chamber automatico em armas com magazine valido
 - `KrydenRewardsSeaChest` nao pode ser pego, nao pode ir para inventario, so permite retirada e apaga quando fica vazio
+
+## 7.1 Como o mod identifica veiculo
+
+O JSON nao possui um campo manual para informar categoria do item.
+
+O mod classifica o comportamento pelo `className` informado no payload.
+
+Para decidir se uma entidade e veiculo, o runtime consulta a hierarquia de classes do DayZ usando o `className`.
+
+Regra atual do mod:
+
+- se `GetGame().IsKindOf(className, "CarScript")` for verdadeiro, a entidade entra no fluxo de veiculo
+- se `GetGame().IsKindOf(className, "Boat_Base")` for verdadeiro, a entidade entra no fluxo de veiculo
+- caso contrario, a entidade entra no fluxo normal de item, container, roupa, colete ou arma
+
+Implicacao para a API:
+
+- a API nao deve enviar um campo como `itemType`, `category` ou `isVehicle`
+- a API deve apenas enviar o `className` correto
+- a classificacao final pertence ao mod, nao ao backend
+
+Exemplos:
+
+- `OffroadHatchback` -> veiculo
+- `AKM` -> nao e veiculo
+- `PlateCarrierVest` -> nao e veiculo
+- `KrydenRewardsSeaChest` -> nao e veiculo
 
 ## 8. Regra para attachments repetidos
 
