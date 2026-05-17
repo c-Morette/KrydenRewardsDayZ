@@ -37,7 +37,9 @@ Exemplo:
   "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
   "serverKey": "COLE_A_DAYZ_SERVER_API_KEY_AQUI",
   "dropOnGroundIfInventoryFull": true,
-  "debugLogs": true
+  "debugLogs": true,
+  "useLocalTestResponse": false,
+  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json"
 }
 ```
 
@@ -90,6 +92,42 @@ Exemplo final de `Config.json` em producao:
   "dropOnGroundIfInventoryFull": true,
   "debugLogs": false
 }
+```
+
+## Modo Local De Teste
+
+Para validar a geracao dos itens sem depender da API, o mod agora suporta um JSON local no profile do servidor.
+
+Configuracao recomendada para teste:
+
+```json
+{
+  "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
+  "serverKey": "COLE_A_DAYZ_SERVER_API_KEY_AQUI",
+  "dropOnGroundIfInventoryFull": true,
+  "debugLogs": true,
+  "useLocalTestResponse": true,
+  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json"
+}
+```
+
+Quando `useLocalTestResponse=true`:
+
+- o preview nao consulta a API
+- a confirmacao tambem nao consulta a API
+- o mod carrega o payload em `localTestResponsePath`
+- se o arquivo nao existir, o mod cria um template automaticamente no primeiro uso
+
+Arquivo esperado para teste:
+
+```text
+$profile:KrydenRewards/TestRedeemResponse.json
+```
+
+Modelo no repositorio para referencia:
+
+```text
+TestRedeemResponse.example.json
 ```
 
 ## Atualizacao De Config Antiga
@@ -146,6 +184,51 @@ O mod preserva os nomes vindos da API:
   ]
 }
 ```
+
+O formato antigo continua suportado.
+
+Na V2, cada item tambem pode conter `attachments` e `cargo` de forma recursiva.
+
+Exemplo resumido:
+
+```json
+{
+  "items": [
+    {
+      "className": "KrydenRewardsSeaChest",
+      "quantity": 1,
+      "cargo": [
+        {
+          "className": "BandageDressing",
+          "quantity": 4
+        },
+        {
+          "className": "AKM",
+          "quantity": 1,
+          "attachments": [
+            {
+              "className": "Mag_AKM_30Rnd"
+            },
+            {
+              "className": "PSO1Optic"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Regras fixas do runtime atual:
+
+- itens, armas, roupas, caixas e containers nascem no chao perto do jogador
+- veiculos nascem a frente do jogador
+- magazines anexados nascem cheios
+- o mod tenta chamber automatico em armas com magazine valido
+- veiculos nascem com fluidos completos
+- attachments repetidos devem ser enviados como entradas repetidas no array
+- `KrydenRewardsSeaChest` nao pode ser pego, nao pode ir para inventario, so permite retirada e apaga quando fica vazio
 
 ## Arquitetura Do Mod
 

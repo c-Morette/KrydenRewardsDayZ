@@ -2,7 +2,23 @@ class KrydenRewardsRedeemItem
 {
     string className;
     int quantity;
+
+    ref array<ref KrydenRewardsRedeemItem> attachments;
+    ref array<ref KrydenRewardsRedeemItem> cargo;
+
+    void KrydenRewardsRedeemItem()
+    {
+        quantity = 1;
+        attachments = new array<ref KrydenRewardsRedeemItem>();
+        cargo = new array<ref KrydenRewardsRedeemItem>();
+    }
+
+    bool HasNestedDefinitions()
+    {
+        return (attachments && attachments.Count() > 0) || (cargo && cargo.Count() > 0);
+    }
 }
+
 class KrydenRewardsRedeemResponse
 {
     string orderId;

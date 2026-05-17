@@ -2,10 +2,10 @@ class CfgPatches
 {
     class KrydenRewards
     {
-        units[] = {};
+        units[] = {"KrydenRewardsSeaChest"};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping"};
     };
 };
 class CfgMods
@@ -34,6 +34,25 @@ class CfgMods
                 value = "";
                 files[] = {"KrydenRewards/Scripts/5_Mission"};
             };
+        };
+    };
+};
+
+class CfgVehicles
+{
+    class SeaChest;
+
+    class KrydenRewardsSeaChest: SeaChest
+    {
+        scope = 2;
+        displayName = "Kryden Rewards Chest";
+        descriptionShort = "Container de recompensa com insercao bloqueada para jogadores.";
+        canBeDigged = 0;
+        class Cargo
+        {
+            itemsCargoSize[] = {10,10};
+            openable = 0;
+            allowOwnedCargoManipulation = 1;
         };
     };
 };

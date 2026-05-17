@@ -4,6 +4,8 @@ class KrydenRewardsConfig
     string serverKey = "COLE_A_DAYZ_SERVER_API_KEY_AQUI";
     bool dropOnGroundIfInventoryFull = true;
     bool debugLogs = true;
+    bool useLocalTestResponse = false;
+    string localTestResponsePath = KrydenRewardsConstants.LOCAL_TEST_RESPONSE_PATH;
     static KrydenRewardsConfig Load()
     {
         if (!FileExist(KrydenRewardsConstants.PROFILE_DIR))
@@ -29,6 +31,11 @@ class KrydenRewardsConfig
     }
     bool IsConfigured()
     {
+        if (useLocalTestResponse)
+        {
+            return localTestResponsePath != "";
+        }
+
         return apiBaseUrl != "" && serverKey != "" && serverKey != "COLE_A_DAYZ_SERVER_API_KEY_AQUI";
     }
 }

@@ -17,6 +17,12 @@ class KrydenRewardsApiHelper
             message = "Config do Kryden Rewards incompleta. Preencha Config.json no profile do servidor.";
             return false;
         }
+
+        if (config.useLocalTestResponse)
+        {
+            return LoadLocalTestResponse(code, steamId, config, action, response, message);
+        }
+
         string baseUrl = config.apiBaseUrl;
         baseUrl.Trim();
         while (baseUrl.Length() > 0 && baseUrl.Substring(baseUrl.Length() - 1, 1) == "/")
@@ -59,6 +65,122 @@ class KrydenRewardsApiHelper
             return false;
         }
         return true;
+    }
+
+    private static bool LoadLocalTestResponse(string code, string steamId, KrydenRewardsConfig config, string action, out KrydenRewardsRedeemResponse response, out string message)
+    {
+        string responsePath = config.localTestResponsePath;
+        string parseMessage;
+
+        response = null;
+        message = "";
+
+        if (responsePath == "")
+        {
+            responsePath = KrydenRewardsConstants.LOCAL_TEST_RESPONSE_PATH;
+        }
+
+        EnsureLocalTestResponseExists(responsePath);
+
+        response = new KrydenRewardsRedeemResponse();
+        if (!JsonFileLoader<KrydenRewardsRedeemResponse>.LoadFile(responsePath, response, parseMessage))
+        {
+            Print("[KrydenRewards] Failed to load local test response: " + parseMessage + " path=" + responsePath);
+            message = "Falha ao ler o JSON local de teste.";
+            return false;
+        }
+
+        if (!response.items)
+        {
+            response.items = new array<ref KrydenRewardsRedeemItem>();
+        }
+
+        if (response.requestId == "")
+        {
+            response.requestId = "LOCAL-TEST";
+        }
+
+        if (response.orderId == "")
+        {
+            response.orderId = "LOCAL-TEST";
+        }
+
+        response.redeemCode = code;
+        response.steamId = steamId;
+
+        if (action == "confirm")
+        {
+            response.status = "Claimed";
+        }
+        else if (response.status == "")
+        {
+            response.status = "ClaimInProgress";
+        }
+
+        return true;
+    }
+
+    private static void EnsureLocalTestResponseExists(string responsePath)
+    {
+        KrydenRewardsRedeemResponse sampleResponse;
+        string saveError;
+
+        if (responsePath == "" || FileExist(responsePath))
+        {
+            return;
+        }
+
+        sampleResponse = BuildLocalTestResponseTemplate();
+        JsonFileLoader<KrydenRewardsRedeemResponse>.SaveFile(responsePath, sampleResponse, saveError);
+        if (saveError != "")
+        {
+            Print("[KrydenRewards] Failed to create local test response template: " + saveError);
+        }
+    }
+
+    private static KrydenRewardsRedeemResponse BuildLocalTestResponseTemplate()
+    {
+        KrydenRewardsRedeemResponse response = new KrydenRewardsRedeemResponse();
+        KrydenRewardsRedeemItem seaChest = CreateRewardItem("KrydenRewardsSeaChest", 1);
+        KrydenRewardsRedeemItem akm = CreateRewardItem("AKM", 1);
+        KrydenRewardsRedeemItem vehicle = CreateRewardItem("OffroadHatchback", 1);
+
+        response.orderId = "KR-LOCAL-TEST-001";
+        response.requestId = "KRLOCAL0001";
+        response.redeemCode = "LOCALTEST";
+        response.steamId = "76561198000000000";
+        response.discordUserId = "0";
+        response.status = "ClaimInProgress";
+
+        seaChest.cargo.Insert(CreateRewardItem("BandageDressing", 4));
+        seaChest.cargo.Insert(CreateRewardItem("TacticalBaconCan", 2));
+        akm.attachments.Insert(CreateRewardItem("Mag_AKM_30Rnd", 1));
+        akm.attachments.Insert(CreateRewardItem("PSO1Optic", 1));
+        akm.attachments.Insert(CreateRewardItem("AK_Suppressor", 1));
+        seaChest.cargo.Insert(akm);
+
+        vehicle.attachments.Insert(CreateRewardItem("HatchbackWheel", 1));
+        vehicle.attachments.Insert(CreateRewardItem("HatchbackWheel", 1));
+        vehicle.attachments.Insert(CreateRewardItem("HatchbackWheel", 1));
+        vehicle.attachments.Insert(CreateRewardItem("HatchbackWheel", 1));
+        vehicle.attachments.Insert(CreateRewardItem("CarBattery", 1));
+        vehicle.attachments.Insert(CreateRewardItem("SparkPlug", 1));
+        vehicle.attachments.Insert(CreateRewardItem("CarRadiator", 1));
+
+        response.items.Insert(seaChest);
+        response.items.Insert(CreateRewardItem("PlateCarrierVest", 1));
+        response.items.Get(1).attachments.Insert(CreateRewardItem("PlateCarrierPouches", 1));
+        response.items.Get(1).attachments.Insert(CreateRewardItem("PlateCarrierHolster", 1));
+        response.items.Insert(vehicle);
+        return response;
+    }
+
+    private static KrydenRewardsRedeemItem CreateRewardItem(string className, int quantity)
+    {
+        KrydenRewardsRedeemItem item = new KrydenRewardsRedeemItem();
+        item.className = className;
+        item.quantity = quantity;
+        return item;
     }
 
     private static string GetKnownErrorMessage(string raw)

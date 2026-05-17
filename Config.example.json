@@ -2,5 +2,7 @@
   "apiBaseUrl": "https://cliente-a.rewards.kryden.com.br",
   "serverKey": "COLE_A_DAYZ_SERVER_API_KEY_AQUI",
   "dropOnGroundIfInventoryFull": true,
-  "debugLogs": true
+  "debugLogs": true,
+  "useLocalTestResponse": false,
+  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json"
 }

@@ -1,0 +1,78 @@
+{
+  "orderId": "KR-LOCAL-TEST-001",
+  "requestId": "KRLOCAL0001",
+  "redeemCode": "LOCALTEST",
+  "steamId": "76561198000000000",
+  "discordUserId": "0",
+  "status": "ClaimInProgress",
+  "items": [
+    {
+      "className": "KrydenRewardsSeaChest",
+      "quantity": 1,
+      "cargo": [
+        {
+          "className": "BandageDressing",
+          "quantity": 4
+        },
+        {
+          "className": "TacticalBaconCan",
+          "quantity": 2
+        },
+        {
+          "className": "AKM",
+          "quantity": 1,
+          "attachments": [
+            {
+              "className": "Mag_AKM_30Rnd"
+            },
+            {
+              "className": "PSO1Optic"
+            },
+            {
+              "className": "AK_Suppressor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "className": "PlateCarrierVest",
+      "quantity": 1,
+      "attachments": [
+        {
+          "className": "PlateCarrierPouches"
+        },
+        {
+          "className": "PlateCarrierHolster"
+        }
+      ]
+    },
+    {
+      "className": "OffroadHatchback",
+      "quantity": 1,
+      "attachments": [
+        {
+          "className": "HatchbackWheel"
+        },
+        {
+          "className": "HatchbackWheel"
+        },
+        {
+          "className": "HatchbackWheel"
+        },
+        {
+          "className": "HatchbackWheel"
+        },
+        {
+          "className": "CarBattery"
+        },
+        {
+          "className": "SparkPlug"
+        },
+        {
+          "className": "CarRadiator"
+        }
+      ]
+    }
+  ]
+}
