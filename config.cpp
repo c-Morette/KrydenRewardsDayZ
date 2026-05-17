@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {"KrydenRewardsSeaChest"};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping"};
+        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "DZ_Gear_Camping"};
     };
 };
 class CfgMods

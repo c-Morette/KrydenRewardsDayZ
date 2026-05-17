@@ -166,6 +166,12 @@ GET /api/dayz/redeem/{code}?steamId={steamId}&serverKey={serverKey}&action=confi
 
 ## JSON Esperado Da API
 
+Referencia principal para a implementacao futura do backend:
+
+```text
+CONTRATO-JSON-API-V2.md
+```
+
 O mod preserva os nomes vindos da API:
 
 ```json
