@@ -234,6 +234,7 @@ Regras fixas do runtime atual:
 - magazines anexados nascem cheios
 - o mod tenta chamber automatico em armas com magazine valido
 - veiculos nascem com fluidos completos
+- veiculos de recompensa recebem lifetime alto fixo no mod
 - attachments repetidos devem ser enviados como entradas repetidas no array
 - `KrydenRewardsSeaChest` nao pode ser pego, nao pode ir para inventario, so permite retirada e apaga quando fica vazio
 

@@ -8,6 +8,10 @@ class KrydenRewardsApiHelper
     {
         return Redeem(code, steamId, config, "confirm", response, message);
     }
+    static bool RedeemFail(string code, string steamId, KrydenRewardsConfig config, out KrydenRewardsRedeemResponse response, out string message)
+    {
+        return Redeem(code, steamId, config, "fail", response, message);
+    }
     private static bool Redeem(string code, string steamId, KrydenRewardsConfig config, string action, out KrydenRewardsRedeemResponse response, out string message)
     {
         response = null;

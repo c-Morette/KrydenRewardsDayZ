@@ -35,6 +35,7 @@ class KrydenRewardsRedeemService
     private static const int MAX_NESTED_REWARD_DEPTH = 8;
     private static const float VEHICLE_SPAWN_DISTANCE = 10.0;
     private static const float GROUND_SPAWN_DISTANCE = 1.2;
+    private static const float VEHICLE_LIFETIME_SECONDS = 3888000.0;
 
     static void ProcessRedeem(PlayerBase player, string code)
     {
@@ -81,6 +82,13 @@ class KrydenRewardsRedeemService
         bool delivered = DeliverItems(player, preview.items);
         if (!delivered)
         {
+            KrydenRewardsRedeemResponse failResponse;
+            string failMessage;
+            if (!KrydenRewardsApiHelper.RedeemFail(code, steamId, config, failResponse, failMessage))
+            {
+                Print("[KrydenRewards] Failed to notify delivery failure for code=" + code + " steamId=" + steamId + " message=" + failMessage);
+            }
+
             player.MessageAction("[Kryden] Falha ao entregar itens. Tente liberar espaco e avise a administracao.");
             return;
         }
@@ -367,6 +375,8 @@ class KrydenRewardsRedeemService
 
         if (Class.CastTo(vehicle, entity))
         {
+            vehicle.SetLifetimeMax(VEHICLE_LIFETIME_SECONDS);
+            vehicle.SetLifetime(VEHICLE_LIFETIME_SECONDS);
             vehicle.Fill(CarFluid.FUEL, vehicle.GetFluidCapacity(CarFluid.FUEL));
             vehicle.Fill(CarFluid.OIL, vehicle.GetFluidCapacity(CarFluid.OIL));
             vehicle.Fill(CarFluid.BRAKE, vehicle.GetFluidCapacity(CarFluid.BRAKE));

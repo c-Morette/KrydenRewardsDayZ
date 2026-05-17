@@ -126,6 +126,7 @@ O backend nao precisa emitir isso no JSON, mas precisa saber que o mod executa e
 - veiculos nascem a frente do jogador
 - veiculos usam distancia fixa de 10 metros
 - veiculos nascem com fluidos completos
+- veiculos de recompensa recebem lifetime alto fixo no mod para reduzir risco de cleanup precoce
 - magazines criados como attachment nascem cheios
 - o mod tenta chamber automatico em armas com magazine valido
 - `KrydenRewardsSeaChest` nao pode ser pego, nao pode ir para inventario, so permite retirada e apaga quando fica vazio
