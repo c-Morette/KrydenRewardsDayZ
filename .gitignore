@@ -1,0 +1,38 @@
+# DayZ generated/runtime files
+Profiles/
+Storage/
+*.log
+*.rpt
+*.mdmp
+
+# Build and packed outputs
+*.pbo
+*.bisign
+*.biprivatekey
+*.bikey
+*.bak
+*.tmp
+build/
+output/
+publish/
+artifacts/
+
+# Local/private config
+Config.json
+KrydenRewards/Config.json
+*.local.json
+*.env
+secrets/
+
+# IDE/OS files
+.vs/
+.vscode/
+*.user
+Thumbs.db
+Desktop.ini
+
+# Keep the public README and docs, but avoid random Markdown notes at repo root.
+/*.md
+!/README.md
+docs/
+docs/*.md
