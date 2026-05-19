@@ -51,7 +51,7 @@ class CfgVehicles
         canBeDigged = 0;
         class Cargo
         {
-            itemsCargoSize[] = {10,10};
+            itemsCargoSize[] = {10,100};
             openable = 0;
             allowOwnedCargoManipulation = 1;
         };
