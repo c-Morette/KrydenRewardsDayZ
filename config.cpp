@@ -16,6 +16,7 @@ class CfgMods
         name = "KrydenRewards";
         author = "Kryden";
         type = "mod";
+        inputs = "KrydenRewards\Scripts\Data\Inputs.xml";
         dependencies[] = {"Game", "World", "Mission"};
         class defs
         {

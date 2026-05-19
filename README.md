@@ -2,7 +2,9 @@
 
 Kryden Rewards is a DayZ server-side/client-side mod that lets players redeem rewards purchased through the Kryden Rewards platform.
 
-Players redeem an approved order in chat:
+Players redeem an approved order through the Kryden Rewards menu. The default key is `End`.
+
+The legacy chat command is still available as a fallback:
 
 ```text
 //resgatar CODIGO
@@ -12,7 +14,8 @@ The mod validates the code with the server API, spawns the configured rewards in
 
 ## Features
 
-- Redeem rewards by chat command.
+- Redeem rewards through an in-game menu.
+- Keeps the legacy chat command as fallback.
 - Uses the real SteamID64 from the DayZ player identity.
 - Supports simple rewards, containers, weapons, cargo, attachments and vehicles.
 - Supports recursive reward payloads from the Kryden Rewards API.
@@ -66,7 +69,7 @@ Steps:
 7. Set `apiBaseUrl` to the Kryden Rewards instance URL.
 8. Set `serverKey` to the instance DayZ server key.
 9. Start the server again.
-10. Test a paid/approved order with `//resgatar CODIGO`.
+10. Test a paid/approved order by pressing `End` and entering the redeem code.
 
 ## Local Test Mode
 

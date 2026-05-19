@@ -1,0 +1,230 @@
+WindowWidgetClass kryden_redeem_root {
+ clipchildren 0
+ ignorepointer 1
+ ignoregloballv 0
+ keepsafezone 0
+ position 0 0
+ size 1 1
+ halign center_ref
+ valign center_ref
+ hexactpos 1
+ vexactpos 1
+ hexactsize 0
+ vexactsize 0
+ priority 960
+ scriptclass ""
+ {
+  WindowWidgetClass kryden_redeem_panel {
+   clipchildren 0
+   ignorepointer 1
+   color 0.118 0.118 0.118 0.98
+   position 0 0
+   size 540 223.5
+   halign center_ref
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   priority 1
+   style Colorable
+   {
+    ButtonWidgetClass kryden_redeem_button {
+     visible 1
+     color 0.318 0.318 0.318 1
+     position 14 7
+     size 130 40
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     userID 1
+     style EmptyHighlight
+     "next left" ""
+     "next right" ""
+     "next up" ""
+     "next down" ""
+     text "RESGATAR"
+     text_proportion 0.5
+     font "gui/fonts/sdf_MetronBook24"
+     "disabled text color" 0.341 0.341 0.341 1
+    }
+    ButtonWidgetClass kryden_close_button {
+     visible 1
+     color 0.318 0.318 0.318 1
+     position 14 7
+     size 130 40
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     userID 2
+     style EmptyHighlight
+     "next left" ""
+     "next right" ""
+     "next up" ""
+     "next down" ""
+     text "#menu_cancel"
+     text_proportion 0.5
+     font "gui/fonts/sdf_MetronBook24"
+     "disabled text color" 0.341 0.341 0.341 1
+    }
+    TextWidgetClass kryden_logo_text {
+     disabled 0
+     ignorepointer 1
+     color 1 0.761 0.18 1
+     position 0 20
+     size 512 30
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style Bold
+     text "[ KRYDEN ]"
+     font "gui/fonts/sdf_MetronBook72"
+     "exact text" 0
+     "text halign" center
+     "text valign" center
+    }
+    FrameWidgetClass PrimaryEditBoxFrame {
+     ignorepointer 1
+     position 93.786 107.764
+     size 432.214 32
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     {
+      EditBoxWidgetClass kryden_redeem_code_input {
+       position 0 -3
+       size 358 32
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       scaled 1
+       priority 1
+       style Default
+       "next left" "ButtonMisc"
+       "next right" "ButtonMisc"
+       "next up" ""
+       "next down" ""
+       "limit visible" 0
+       "Use default text" 0
+       "exact text" 0
+       font "gui/fonts/sdf_MetronLight24"
+      }
+      ButtonWidgetClass ButtonMisc {
+       visible 0
+       color 1 0 0 1
+       size 32 32
+       halign right_ref
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       priority 1
+       userID 6
+       style EmptyHighlight
+       "next left" "PrimaryPasswordEditBox"
+       "next right" "PrimaryPasswordEditBox"
+       "next up" ""
+       "next down" ""
+       text_proportion 0.5
+       font "gui/fonts/sdf_MetronBook24"
+       "disabled text color" 0.341 0.341 0.341 1
+      }
+     }
+    }
+    MultilineTextWidgetClass kryden_title_text {
+     clipchildren 0
+     ignorepointer 1
+     color 1 1 1 1
+     position 0 72.5
+     size 512 30
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "Resgate o codigo por aqui caso seu chat nao funcionar."
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 0
+     "exact text size" 22
+     "size to text h" 1
+     "size to text v" 1
+     "text halign" center
+     wrap 1
+    }
+    TextWidgetClass PrimaryLabel {
+     ignorepointer 1
+     position 14 107.764
+     size 119.664 32
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "CODIGO:"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 18
+     "size to text h" 1
+     "size to text v" 0
+     "text valign" center
+    }
+    PanelWidgetClass SeparatorPanel {
+     ignorepointer 1
+     color 1 0.761 0.18 1
+     position 0 60
+     size 0.85 3
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+     scaled 1
+     priority 10
+     style rover_sim_colorable
+    }
+    PanelWidgetClass SeparatorPanel0 {
+     ignorepointer 1
+     position 2 139.764
+     size 0.66 3
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+     scaled 1
+     priority 10
+     style rover_sim_colorable
+    }
+    MultilineTextWidgetClass kryden_status_text {
+     clipchildren 0
+     ignorepointer 1
+     color 1 1 1 1
+     position 2 144.5
+     size 355 30
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 0
+     "exact text size" 22
+     "size to text h" 1
+     "size to text v" 1
+     "text halign" center
+     wrap 1
+    }
+   }
+  }
+ }
+}

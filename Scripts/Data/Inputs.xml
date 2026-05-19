@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+    <inputs>
+        <actions>
+            <input name="UAKrydenRewardsRedeem" loc="Abrir Kryden Rewards" />
+        </actions>
+
+        <sorting name="KrydenRewards" loc="Kryden Rewards">
+            <input name="UAKrydenRewardsRedeem" />
+        </sorting>
+    </inputs>
+
+    <preset>
+        <input name="UAKrydenRewardsRedeem">
+            <btn name="kI">
+            </btn>
+        </input>
+    </preset>
+</modded_inputs>

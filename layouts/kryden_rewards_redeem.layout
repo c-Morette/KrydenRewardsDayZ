@@ -1,0 +1,217 @@
+FrameWidgetClass kryden_redeem_root {
+ clipchildren 1
+ ignorepointer 0
+ color 0 0 0 0.36
+ position 0 0
+ size 1 1
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 2
+ {
+  FrameWidgetClass kryden_redeem_panel {
+   visible 1
+   ignorepointer 0
+   color 0.02 0.02 0.022 0.94
+   position 0 -0.026
+   size 0.32 0.168
+   halign center_ref
+   valign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   priority 1
+   {
+    PanelWidgetClass PanelWidget0 {
+     ignorepointer 1
+     color 0.12 0.12 0.13 1
+     position -0.001 -0.004
+     size 0.996 0.987
+     halign center_ref
+     valign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style DayZDefaultPanel
+    }
+    TextWidgetClass kryden_logo_text {
+     ignorepointer 1
+     color 1 0.76 0.18 1
+     position 0 0.03
+     size 1 0.17
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 2
+     text "[ KRYDEN ]"
+     font "gui/fonts/sdf_MetronBook24"
+     text_proportion 0.52
+     "text halign" center
+     "text valign" center
+    }
+    PanelWidgetClass kryden_header_line {
+     ignorepointer 1
+     color 1 0.761 0.18 1
+     position 0 0.22
+     size 1 2
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 1
+     priority 1
+     style DayZDefaultPanel
+    }
+    TextWidgetClass kryden_title_text {
+     ignorepointer 1
+     color 0.72 0.72 0.72 1
+     position 0.06 0.27
+     size 0.88 0.11
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 1
+     text "Código de resgate:"
+     font "gui/fonts/sdf_MetronBook24"
+     text_proportion 0.44
+     "text halign" left
+     "text valign" center
+    }
+    EditBoxWidgetClass kryden_redeem_code_input {
+     visible 1
+     ignorepointer 0
+     color 0.015 0.015 0.017 0.96
+     position 0.06 0.39
+     size 0.88 0.19
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 2
+     style Default
+     text "KR-"
+     "exact text" 1
+     font "gui/fonts/sdf_MetronBook24"
+     "text color" 0.94 0.94 0.94 1
+     "text halign" left
+     "text valign" center
+    }
+    TextWidgetClass kryden_status_text {
+     ignorepointer 1
+     color 1 0.761 0.18 1
+     position 0.06 0.59
+     size 0.88 0.07
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 1
+     font "gui/fonts/sdf_MetronBook24"
+     text_proportion 0.3
+     "text halign" left
+     "text valign" center
+    }
+    PanelWidgetClass kryden_footer_line {
+     ignorepointer 1
+     color 1 0.761 0.18 1
+     position 0 0.68
+     size 1 2
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 1
+     priority 1
+     style DayZDefaultPanel
+    }
+    TextWidgetClass kryden_enter_key_text {
+     ignorepointer 1
+     color 1 0.76 0.18 1
+     position 0.06 0.73
+     size 0.14 0.18
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 1
+     text "ENTER"
+     font "gui/fonts/sdf_MetronBook24"
+     text_proportion 0.34
+     "text halign" left
+     "text valign" center
+    }
+    TextWidgetClass kryden_enter_action_text {
+     ignorepointer 1
+     color 0.72 0.72 0.72 1
+     position 0.21 0.73
+     size 0.26 0.18
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 1
+     text "- Resgatar"
+     font "gui/fonts/sdf_MetronBook24"
+     text_proportion 0.34
+     "text halign" left
+     "text valign" center
+    }
+    PanelWidgetClass PanelWidget1 {
+     ignorepointer 1
+     color 0.12 0.12 0.13 1
+     position 0.06 0.106
+     size 0.383 0.138
+     halign right_ref
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     scaled 1
+     style DayZDefaultPanel
+     {
+      TextWidgetClass kryden_esc_key_text {
+       ignorepointer 1
+       color 1 0.76 0.18 1
+       size 0.211 30
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 1
+       priority 1
+       text "ESC"
+       font "gui/fonts/sdf_MetronBook24"
+       text_proportion 0.34
+       "text halign" left
+       "text valign" center
+      }
+      TextWidgetClass kryden_esc_action_text {
+       ignorepointer 1
+       color 0.72 0.72 0.72 1
+       position 0.105 0.019
+       size 0.735 30
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 1
+       priority 1
+       text "- Fechar"
+       font "gui/fonts/sdf_MetronBook24"
+       text_proportion 0.34
+       "text halign" left
+       "text valign" center
+      }
+     }
+    }
+   }
+  }
+ }
+}

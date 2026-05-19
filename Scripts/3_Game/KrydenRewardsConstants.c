@@ -1,6 +1,7 @@
 class KrydenRewardsConstants
 {
     static const int RPC_REDEEM_REQUEST = 914001;
+    static const int RPC_REDEEM_STATUS = 914002;
     static const string PROFILE_DIR = "$profile:KrydenRewards";
     static const string CONFIG_PATH = "$profile:KrydenRewards/Config.json";
     static const string LOCAL_TEST_RESPONSE_PATH = "$profile:KrydenRewards/TestRedeemResponse.json";

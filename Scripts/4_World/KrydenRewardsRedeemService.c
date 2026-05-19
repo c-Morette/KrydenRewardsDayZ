@@ -30,6 +30,24 @@ class KrydenRewardsDeliveryContext
     }
 }
 
+class KrydenRewardsRedeemStatus
+{
+    static void Notify(PlayerBase player, string message, bool canSubmit = true)
+    {
+        if (!player)
+        {
+            return;
+        }
+
+        player.MessageAction("[Kryden] " + message);
+
+        if (GetGame().IsServer() && player.GetIdentity())
+        {
+            GetGame().RPCSingleParam(player, KrydenRewardsConstants.RPC_REDEEM_STATUS, new Param2<string, bool>(message, canSubmit), true, player.GetIdentity());
+        }
+    }
+}
+
 class KrydenRewardsRedeemService
 {
     private static const int MAX_NESTED_REWARD_DEPTH = 8;
@@ -51,31 +69,31 @@ class KrydenRewardsRedeemService
         code.ToUpper();
         if (code == "")
         {
-            player.MessageAction("[Kryden] Use: //resgatar CODIGO");
+            KrydenRewardsRedeemStatus.Notify(player, "Use: //resgatar CODIGO", true);
             return;
         }
         string steamId = player.GetIdentity().GetPlainId();
         KrydenRewardsConfig config = KrydenRewardsConfig.Load();
         if (!config.IsConfigured())
         {
-            player.MessageAction("[Kryden] Sistema ainda nao configurado. Avise a administracao.");
+            KrydenRewardsRedeemStatus.Notify(player, "Sistema ainda nao configurado. Avise a administracao.", true);
             return;
         }
         if (config.debugLogs)
         {
             Print("[KrydenRewards] Redeem requested. code=" + code + " steamId=" + steamId);
         }
-        player.MessageAction("[Kryden] Consultando recompensa...");
+        KrydenRewardsRedeemStatus.Notify(player, "Consultando recompensa...", false);
         KrydenRewardsRedeemResponse preview;
         string previewMessage;
         if (!KrydenRewardsApiHelper.RedeemPreview(code, steamId, config, preview, previewMessage))
         {
-            player.MessageAction("[Kryden] " + previewMessage);
+            KrydenRewardsRedeemStatus.Notify(player, previewMessage, true);
             return;
         }
         if (!preview.items || preview.items.Count() == 0)
         {
-            player.MessageAction("[Kryden] Nenhum item retornado para este resgate.");
+            KrydenRewardsRedeemStatus.Notify(player, "Nenhum item retornado para este resgate.", true);
             return;
         }
 
@@ -89,18 +107,18 @@ class KrydenRewardsRedeemService
                 Print("[KrydenRewards] Failed to notify delivery failure for code=" + code + " steamId=" + steamId + " message=" + failMessage);
             }
 
-            player.MessageAction("[Kryden] Falha ao entregar itens. Tente liberar espaco e avise a administracao.");
+            KrydenRewardsRedeemStatus.Notify(player, "Falha ao entregar itens. Tente liberar espaco e avise a administracao.", true);
             return;
         }
         KrydenRewardsRedeemResponse confirm;
         string confirmMessage;
         if (!KrydenRewardsApiHelper.RedeemConfirm(code, steamId, config, confirm, confirmMessage))
         {
-            player.MessageAction("[Kryden] Itens entregues, mas a confirmacao falhou. Avise a administracao.");
+            KrydenRewardsRedeemStatus.Notify(player, "Itens entregues, mas a confirmacao falhou. Avise a administracao.", true);
             Print("[KrydenRewards] Confirm failed for code=" + code + " steamId=" + steamId + " message=" + confirmMessage);
             return;
         }
-        player.MessageAction("[Kryden] Resgate concluido: " + preview.requestId);
+        KrydenRewardsRedeemStatus.Notify(player, "Resgate concluido: " + preview.requestId, true);
     }
 
     private static bool DeliverItems(PlayerBase player, array<ref KrydenRewardsRedeemItem> items)
