@@ -18,6 +18,7 @@ The mod validates the code with the server API, spawns the configured rewards in
 - Keeps the legacy chat command as fallback.
 - Uses the real SteamID64 from the DayZ player identity.
 - Supports simple rewards, containers, weapons, cargo, attachments and vehicles.
+- Supports `coin` rewards that credit the player's KrydenVirtualMarket wallet instead of spawning an entity.
 - Supports recursive reward payloads from the Kryden Rewards API.
 - Supports local JSON test mode for validating item spawning without calling the API.
 - Keeps the private server API key outside the PBO, inside the server profile.
@@ -39,11 +40,14 @@ Example:
   "dropOnGroundIfInventoryFull": true,
   "debugLogs": false,
   "useLocalTestResponse": false,
-  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json"
+  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json",
+  "coinPlayerDatabaseDir": "$profile:KrydenVirtualMarket/Database/Players"
 }
 ```
 
 Never put the real `serverKey` inside the public PBO. Keep it only in the server profile.
+
+`coinPlayerDatabaseDir` points the mod to the KrydenVirtualMarket wallet folder. It can be changed without rebuilding the PBO. If left empty, it falls back to the default above.
 
 ## Installation
 
@@ -157,6 +161,42 @@ Nested example:
 ```
 
 Attachments do not use `quantity`; repeated attachments should be repeated entries in the `attachments` array.
+
+## Coin Rewards (KrydenVirtualMarket)
+
+Coin selling requires the [KrydenVirtualMarket](https://steamcommunity.com/sharedfiles/filedetails/?id=3742977936) mod installed on the server. Players buy coins through Discord (Kryden Rewards platform) and spend them in the in-game virtual store.
+
+A coin reward is a reward item with `className: "coin"`. Instead of spawning an entity, the mod reads the player's wallet at:
+
+```text
+<coinPlayerDatabaseDir>/<steamId>.json
+```
+
+(default `$profile:KrydenVirtualMarket/Database/Players/<steamId>.json`), adds `quantity` into the `Coin` field, and saves. The wallet JSON mirrors KrydenVirtualMarket's `KVMPlayerDataFile` (`Name`, `SteamID64`, `FirstLogin`, `Coin`); all fields are preserved on save. KrydenVirtualMarket reflects the new balance the next time the player opens the market (it reloads the file from disk).
+
+Example coin payload:
+
+```json
+{
+  "orderId": "KR-LOCAL-COIN-001",
+  "requestId": "KRLOCALCOIN0001",
+  "redeemCode": "LOCALCOIN",
+  "steamId": "76561198181942294",
+  "discordUserId": "0",
+  "status": "ClaimInProgress",
+  "items": [
+    { "className": "coin", "quantity": 150 }
+  ]
+}
+```
+
+Rules and failure cases:
+
+- A coin package must contain only `coin` items, with no `attachments` or `cargo` (mixing coins with items/vehicles fails the redeem).
+- The wallet directory and the player's `<steamId>.json` must already exist; the mod never creates a malformed wallet file. The player must have logged into KrydenVirtualMarket at least once.
+- On any failure the redeem is reported as failed to the API so the order can be retried.
+
+> Note: the `coinPlayerDatabaseDir` default targets KrydenVirtualMarket. The `KrydenRewardsMister` fork is a separate build for the Sparda server and uses a different wallet schema (`Balance`) and path (`SpardaStore/PlayerDatabase`) — do not mix them.
 
 ## Documentation
 
