@@ -4,5 +4,6 @@
   "dropOnGroundIfInventoryFull": true,
   "debugLogs": true,
   "useLocalTestResponse": false,
-  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json"
+  "localTestResponsePath": "$profile:KrydenRewards/TestRedeemResponse.json",
+  "coinPlayerDatabaseDir": "$profile:KrydenVirtualMarket/Database/Players"
 }

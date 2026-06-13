@@ -39,3 +39,14 @@ class KrydenRewardsErrorResponse
     string error;
     string message;
 }
+
+// Espelha KVMPlayerDataFile (KrydenVirtualMarket) para preservar todos os campos no round-trip do JSON.
+// O saldo de coins fica no campo "Coin"; Name/SteamID64/FirstLogin precisam existir aqui para nao serem
+// apagados ao regravar o arquivo.
+class KrydenRewardsPlayerCoinBalance
+{
+    string Name;
+    string SteamID64;
+    string FirstLogin;
+    int Coin;
+}

@@ -5,6 +5,7 @@ class KrydenRewardsConstants
     static const string PROFILE_DIR = "$profile:KrydenRewards";
     static const string CONFIG_PATH = "$profile:KrydenRewards/Config.json";
     static const string LOCAL_TEST_RESPONSE_PATH = "$profile:KrydenRewards/TestRedeemResponse.json";
+    static const string COIN_PLAYER_DATABASE_DIR = "$profile:KrydenVirtualMarket/Database/Players";
     static const string REDEEM_COMMAND_PREFIX = "//resgatar";
 }
 class KrydenRewardsChatCommand

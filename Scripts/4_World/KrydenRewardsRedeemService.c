@@ -97,7 +97,8 @@ class KrydenRewardsRedeemService
             return;
         }
 
-        bool delivered = DeliverItems(player, preview.items);
+        string deliveryMessage;
+        bool delivered = DeliverItems(player, preview.items, config, deliveryMessage);
         if (!delivered)
         {
             KrydenRewardsRedeemResponse failResponse;
@@ -107,7 +108,12 @@ class KrydenRewardsRedeemService
                 Print("[KrydenRewards] Failed to notify delivery failure for code=" + code + " steamId=" + steamId + " message=" + failMessage);
             }
 
-            KrydenRewardsRedeemStatus.Notify(player, "Falha ao entregar itens. Tente liberar espaco e avise a administracao.", true);
+            if (deliveryMessage == "")
+            {
+                deliveryMessage = "Falha ao entregar itens. Tente liberar espaco e avise a administracao.";
+            }
+
+            KrydenRewardsRedeemStatus.Notify(player, deliveryMessage, true);
             return;
         }
         KrydenRewardsRedeemResponse confirm;
@@ -121,20 +127,184 @@ class KrydenRewardsRedeemService
         KrydenRewardsRedeemStatus.Notify(player, "Resgate concluido: " + preview.requestId, true);
     }
 
-    private static bool DeliverItems(PlayerBase player, array<ref KrydenRewardsRedeemItem> items)
+    private static bool DeliverItems(PlayerBase player, array<ref KrydenRewardsRedeemItem> items, KrydenRewardsConfig config, out string message)
     {
+        message = "";
+
+        if (ContainsCoinRewards(items))
+        {
+            return DeliverCoinRewards(player, items, config, message);
+        }
+
         KrydenRewardsDeliveryContext deliveryContext = new KrydenRewardsDeliveryContext();
 
         foreach (KrydenRewardsRedeemItem rewardItem : items)
         {
             if (!SpawnRootReward(player, rewardItem, deliveryContext, 0))
             {
+                message = "Falha ao criar uma ou mais recompensas do resgate.";
                 deliveryContext.Rollback();
                 return false;
             }
         }
 
         return true;
+    }
+
+    private static bool DeliverCoinRewards(PlayerBase player, array<ref KrydenRewardsRedeemItem> items, KrydenRewardsConfig config, out string message)
+    {
+        int totalCoins = 0;
+
+        message = "";
+
+        foreach (KrydenRewardsRedeemItem rewardItem : items)
+        {
+            if (!TryAccumulateCoinReward(rewardItem, totalCoins, message))
+            {
+                return false;
+            }
+        }
+
+        if (totalCoins < 1)
+        {
+            message = "Pacote de moedas invalido: quantidade ausente.";
+            return false;
+        }
+
+        return AddCoinsToPlayerBalance(player, totalCoins, config, message);
+    }
+
+    private static bool TryAccumulateCoinReward(KrydenRewardsRedeemItem rewardItem, inout int totalCoins, out string message)
+    {
+        message = "";
+
+        if (!rewardItem || rewardItem.className == "")
+        {
+            message = "Pacote de moedas invalido: item sem className.";
+            return false;
+        }
+
+        if (!IsCoinClassName(rewardItem.className))
+        {
+            message = "Pacote de moedas nao pode misturar moedas com outros itens ou veiculos.";
+            return false;
+        }
+
+        if (rewardItem.HasNestedDefinitions())
+        {
+            message = "Pacote de moedas nao pode ter attachments ou cargo.";
+            return false;
+        }
+
+        totalCoins = totalCoins + GetNormalizedQuantity(rewardItem);
+        return true;
+    }
+
+    // Credita coins direto no arquivo do KrydenVirtualMarket ($profile:KrydenVirtualMarket/Database/Players/<steamId>.json).
+    // O JSON espelha KVMPlayerDataFile (Name/SteamID64/FirstLogin/Coin); o saldo soma no campo "Coin".
+    // O KVM rele o arquivo do disco ao abrir o market (ReloadFromDisk), entao a edicao externa e refletida.
+    private static bool AddCoinsToPlayerBalance(PlayerBase player, int coinAmount, KrydenRewardsConfig config, out string message)
+    {
+        string coinDirectoryPath;
+        string steamId;
+        string walletPath;
+        KrydenRewardsPlayerCoinBalance wallet;
+        string loadError;
+        string saveError;
+
+        message = "";
+
+        if (!player || !player.GetIdentity())
+        {
+            message = "Jogador invalido para credito de moedas.";
+            return false;
+        }
+
+        if (!config)
+        {
+            message = "Config invalida para credito de moedas.";
+            return false;
+        }
+
+        coinDirectoryPath = config.GetCoinPlayerDatabaseDir();
+        if (coinDirectoryPath == "")
+        {
+            message = "Diretorio de moedas nao configurado.";
+            return false;
+        }
+
+        if (!FileExist(coinDirectoryPath))
+        {
+            message = "Diretorio de moedas nao encontrado em profiles.";
+            return false;
+        }
+
+        steamId = player.GetIdentity().GetPlainId();
+        if (steamId == "")
+        {
+            message = "SteamID invalido para credito de moedas.";
+            return false;
+        }
+
+        walletPath = coinDirectoryPath + "/" + steamId + ".json";
+        if (!FileExist(walletPath))
+        {
+            message = "Arquivo de moedas do jogador nao encontrado: " + steamId + ".json";
+            return false;
+        }
+
+        wallet = new KrydenRewardsPlayerCoinBalance();
+        if (!JsonFileLoader<KrydenRewardsPlayerCoinBalance>.LoadFile(walletPath, wallet, loadError))
+        {
+            Print("[KrydenRewards] Failed to load coin wallet: " + loadError + " path=" + walletPath);
+            message = "Falha ao ler o arquivo de moedas do jogador.";
+            return false;
+        }
+
+        wallet.Coin = wallet.Coin + coinAmount;
+        JsonFileLoader<KrydenRewardsPlayerCoinBalance>.SaveFile(walletPath, wallet, saveError);
+        if (saveError != "")
+        {
+            Print("[KrydenRewards] Failed to save coin wallet: " + saveError + " path=" + walletPath);
+            message = "Falha ao salvar o arquivo de moedas do jogador.";
+            return false;
+        }
+
+        Print("[KrydenRewards] Coin balance updated. steamId=" + steamId + " amount=" + coinAmount + " newBalance=" + wallet.Coin);
+        return true;
+    }
+
+    private static bool ContainsCoinRewards(array<ref KrydenRewardsRedeemItem> items)
+    {
+        if (!items)
+        {
+            return false;
+        }
+
+        foreach (KrydenRewardsRedeemItem rewardItem : items)
+        {
+            if (ContainsCoinReward(rewardItem))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ContainsCoinReward(KrydenRewardsRedeemItem rewardItem)
+    {
+        if (!rewardItem)
+        {
+            return false;
+        }
+
+        if (IsCoinClassName(rewardItem.className))
+        {
+            return true;
+        }
+
+        return ContainsCoinRewards(rewardItem.attachments) || ContainsCoinRewards(rewardItem.cargo);
     }
 
     private static bool SpawnRootReward(PlayerBase player, KrydenRewardsRedeemItem rewardItem, KrydenRewardsDeliveryContext deliveryContext, int depth)
@@ -420,5 +590,14 @@ class KrydenRewardsRedeemService
         }
 
         return GetGame().IsKindOf(className, "CarScript") || GetGame().IsKindOf(className, "Boat_Base");
+    }
+
+    private static bool IsCoinClassName(string className)
+    {
+        string normalized = className;
+
+        normalized.Trim();
+        normalized.ToLower();
+        return normalized == "coin";
     }
 }
